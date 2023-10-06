@@ -39,6 +39,7 @@ class ProductController extends Controller
     public function getProductById(Request $request){
         return DB::select('select * from products where id="'.$request['id'].'"')[0];
     }
+
     public function updateProducts(Request $request){
         $statement = "CALL sp_add_new_product(?,?,?,?,?,?,?,?)";
         $params = [
@@ -53,5 +54,11 @@ class ProductController extends Controller
         ];
         $data = DB::select($statement, $params);
         return $data;
+    }
+
+    public function deleteProductsById(Request $request){
+        for($i=0; $i < $request['ids'];$i++){
+            DB::unprepared("DELETE FROM products WHERE id=".$request['ids'][$i]);
+        }
     }
 }
